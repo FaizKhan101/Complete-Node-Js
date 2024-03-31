@@ -1,8 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 
-const friendsController = require("./controllers/friends.controller");
-const messagesController = require("./controllers/messages.controller");
+const friendsRoutes = require("./routes/friends.routes");
+const messagesRoutes = require("./routes/messages.routes");
 
 const app = express();
 
@@ -15,16 +15,11 @@ app.use((req, res, next) => {
   next();
   const delta = Date.now() - start;
   console.log(`${req.method} ${req.url} ${delta}ms`);
+  console.log({req});
 });
 
-app.get("/friends", friendsController.getFriends);
+app.use("/friends", friendsRoutes);
 
-app.get("/friends/:friendId", friendsController.getFriend);
-
-app.post("/friends", friendsController.postFriend);
-
-app.get("/messages", messagesController.getMessages);
-
-app.post("/messages", messagesController.postMessage);
+app.use("/messages", messagesRoutes);
 
 app.listen(3000, () => console.log("Server start at port 3000!"));
