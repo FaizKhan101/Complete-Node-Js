@@ -1,17 +1,30 @@
-const express = require("express")
+const express = require("express");
+const bodyParser = require("body-parser");
 
-const app = express()
+const friendsController = require("./controllers/friends.controller");
+const messagesController = require("./controllers/messages.controller");
 
-app.get("/", (req, res, next) => {
-    res.send("<h1>Helloooo</h1>")
-})
+const app = express();
 
-app.get("/messages", (req, res, next) => {
-    res.send("<ul><li>Hello Faiz Khan</li></ul>")
-})
+app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(express.urlencoded({ extended: false }))
+app.use(express.json());
 
-app.post("/messages", (req, res, next) => {
-    res.send("Updating...")
-})
+app.use((req, res, next) => {
+  const start = Date.now();
+  next();
+  const delta = Date.now() - start;
+  console.log(`${req.method} ${req.url} ${delta}ms`);
+});
 
-app.listen(3000, () => console.log("Server start at port 3000!"))
+app.get("/friends", friendsController.getFriends);
+
+app.get("/friends/:friendId", friendsController.getFriend);
+
+app.post("/friends", friendsController.postFriend);
+
+app.get("/messages", messagesController.getMessages);
+
+app.post("/messages", messagesController.postMessage);
+
+app.listen(3000, () => console.log("Server start at port 3000!"));
