@@ -23,15 +23,15 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.url} ${delta}ms`);
 });
 
+app.use("/friends", friendsRoutes);
+
+app.use("/messages", messagesRoutes);
+
 app.use("/", (req, res, next) => {
   res.render("index", {
     title: "My Friend is very clever",
     caption: "It's time to learn Node.Js"
   })
 })
-
-app.use("/friends", friendsRoutes);
-
-app.use("/messages", messagesRoutes);
 
 app.listen(3000, () => console.log("Server start at port 3000!"));
